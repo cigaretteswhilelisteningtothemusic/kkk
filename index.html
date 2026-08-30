@@ -191,11 +191,13 @@
     /* background sudah dihapus dari foto (PNG transparan), drop-shadow
        mengikuti siluet kue supaya menyatu dengan latar halaman */
     filter: drop-shadow(0 22px 30px rgba(0,0,0,.55));
-    transition: filter .6s ease, opacity .6s ease;
+    transition: filter .7s cubic-bezier(.22,1,.36,1), opacity .7s cubic-bezier(.22,1,.36,1), transform .7s cubic-bezier(.22,1,.36,1);
   }
   .cake-photo-frame.dimmed .cake-photo{
-    opacity:.35;
-    filter: drop-shadow(0 22px 30px rgba(0,0,0,.55)) blur(1px);
+    opacity:0;
+    transform: scale(.82);
+    filter: drop-shadow(0 22px 30px rgba(0,0,0,.55)) blur(6px);
+    pointer-events:none;
   }
 
   /* ===================== CONTINUE BUTTON ===================== */
@@ -225,32 +227,60 @@
   .continue-btn:active{ transform: translateY(0); }
   .continue-btn:focus-visible{ outline: 3px solid var(--pink); outline-offset: 3px; }
 
-  /* ===================== NOTE PHOTO (foto catatan, di bawah foto kue) ===================== */
-  .note-photo-wrap{
-    width:100%;
-    max-width: 420px;
-    margin-top: 44px;
-    opacity:0; transform: translateY(24px) scale(.96);
-    transition: opacity .7s ease, transform .7s ease;
-    display:flex; justify-content:center;
+  /* ===================== NOTE CARD (menutupi foto kue) ===================== */
+  .note-wrap{
+    position:absolute;
+    inset:0;
+    z-index: 6;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding: 10px;
+    opacity:0; transform: scale(.3) rotate(-360deg);
+    pointer-events:none;
+    transition: opacity .35s ease-out, transform .9s cubic-bezier(.34,1.56,.64,1);
   }
-  .note-photo-wrap.show{ opacity:1; transform:translateY(0) scale(1); }
-  .note-photo{
+  .note-wrap.show{ opacity:1; transform:scale(1) rotate(0deg); pointer-events:auto; }
+  .note-card{
+    position:relative;
     width:100%;
-    height:auto;
-    display:block;
-    filter: drop-shadow(0 20px 34px rgba(0,0,0,.55));
+    max-width: 360px;
+    background: linear-gradient(180deg, #fffaf0, #fff3da);
+    color: #3a2a1a;
+    border-radius: 10px;
+    padding: 28px 22px 22px;
+    box-shadow: 0 18px 44px rgba(0,0,0,.55), 0 0 0 1px rgba(255,255,255,.4) inset;
+    transform: rotate(-1.2deg);
+  }
+  .note-pin{
+    position:absolute; top:-12px; left:50%; transform:translateX(-50%);
+    width:20px; height:20px; border-radius:50%;
+    background: radial-gradient(circle at 35% 30%, #ff9db8, var(--pink));
+    box-shadow: 0 4px 8px rgba(0,0,0,.35);
+  }
+  .note-text{
+    font-family: var(--font-hand);
+    font-size: 24px;
+    line-height: 1.45;
+    white-space: pre-wrap;
+    margin:0;
+  }
+  .note-from{
+    margin-top: 14px; text-align:right;
+    font-family: var(--font-hand);
+    font-size: 21px;
+    color: #7a5a2a;
   }
 
   /* ===================== GIFT (animasi Lottie) ===================== */
   .gift-wrap{
     margin-top: 40px;
-    opacity:0; transform: translateY(24px) scale(.95);
+    opacity:0; transform: scale(.3) rotate(-360deg);
     pointer-events:none;
-    transition: opacity .8s ease .15s, transform .8s ease .15s;
+    transition: opacity .35s ease-out, transform .9s cubic-bezier(.34,1.56,.64,1);
     display:flex; flex-direction:column; align-items:center; gap:14px;
   }
-  .gift-wrap.show{ opacity:1; transform:translateY(0) scale(1); pointer-events:auto; }
+  .gift-wrap.show{ opacity:1; transform:scale(1) rotate(0deg); pointer-events:auto; }
 
   .gift-hint{ font-size: 14px; color: var(--cream-dim); }
 
@@ -259,6 +289,22 @@
     display:flex; align-items:center; justify-content:center;
   }
   .gift-box:focus-visible{ outline: 3px solid var(--pink); outline-offset:4px; border-radius: 8px; }
+  /* Gerakan "tidak sabar" saat kado belum dibuka: diam sejenak lalu
+     bergetar-getar kecil seolah ingin membuka diri sendiri, berulang. */
+  .gift-box:not(.opened) #giftLottie{
+    animation: gift-impatient 2.8s ease-in-out infinite;
+    transform-origin: 50% 85%;
+  }
+  @keyframes gift-impatient{
+    0%, 74%, 100%{ transform: rotate(0deg) scale(1); }
+    77%{ transform: rotate(-9deg) scale(1.05); }
+    80%{ transform: rotate(8deg) scale(1.04); }
+    83%{ transform: rotate(-7deg) scale(1.04); }
+    86%{ transform: rotate(6deg) scale(1.03); }
+    89%{ transform: rotate(-4deg) scale(1.02); }
+    92%{ transform: rotate(3deg) scale(1.01); }
+    95%{ transform: rotate(-1deg) scale(1); }
+  }
   .gift-box.shake #giftLottie{ animation: box-shake .5s ease; }
   @keyframes box-shake{
     0%,100%{ transform: rotate(0); }
@@ -369,9 +415,16 @@
   .balloon-piece{ animation-duration: 6.5s !important; }
   .emoji-piece{ animation-duration: 3.6s !important; }
 
+  /* Animasi note & kado (muncul membesar sambil berputar) tetap dijalankan
+     penuh meskipun perangkat mengaktifkan "kurangi animasi" (Reduce Motion),
+     supaya efek putarnya tetap terlihat. */
+  .note-wrap{ transition-duration: .35s, .9s !important; }
+  .gift-wrap{ transition-duration: .35s, .9s !important; }
+  .cake-photo{ transition-duration: .7s !important; }
+  .gift-box:not(.opened) #giftLottie{ animation-duration: 2.8s !important; }
+
   @media (max-width: 380px){
     .cake-wrap{ transform: scale(.85); }
-    .note-photo-wrap{ margin-top: 30px; }
   }
 </style>
 </head>
@@ -382,15 +435,15 @@
 <!-- ===================== START OVERLAY ===================== -->
 <div id="startOverlay">
   <div class="start-emoji">🎈</div>
-  <h1 class="start-title">bales yang kemarin XD</h1>
-  <p class="start-sub">maap ya telat</p>
-  <button class="tap-btn" id="startBtn" type="button">Ketuk untuk mulai</button>
+  <h1 class="start-title">Ada kejutan untukmu</h1>
+  <p class="start-sub">Siap-siap ya, ada kue, lilin, dan sedikit kejutan yang menunggu.</p>
+  <button class="tap-btn" id="startBtn" type="button">Ketuk untuk mulai 🎉</button>
 </div>
 
 <!-- ===================== PHOTO SLIP (overlay penuh layar) ===================== -->
 <div id="photoSlipOverlay" class="hidden">
   <div class="photo-slip-stack" id="photoSlipStack"></div>
-  <p class="slip-hint">Geser fotonya untuk lihat berikutnya</p>
+  <p class="slip-hint">Geser fotonya untuk lihat berikutnya ✨</p>
 </div>
 
 <div id="surpriseOverlay"></div>
@@ -402,31 +455,35 @@
 
 <div class="stage">
   <div class="header">
-    <p class="eyebrow"></p>
-    <h1 class="title" id="titleText">Happy Birthdayy</h1>
-    <p class="subtitle">take a look</p>
+    <p class="eyebrow">Kejutan Ulang Tahun</p>
+    <h1 class="title" id="titleText">Selamat Ulang Tahun!</h1>
+    <p class="subtitle">Untukmu, hari ini 🎂</p>
   </div>
 
   <div class="scene">
     <div class="cake-wrap">
       <div class="cake-photo-frame" id="cakeFrame">
         <img class="cake-photo" id="cakePhoto" alt="Kue ulang tahun">
+
+        <!-- NOTE CARD: muncul menutupi foto kue setelah tombol continue ditekan -->
+        <div class="note-wrap" id="noteWrap">
+          <div class="note-card">
+            <div class="note-pin"></div>
+            <p class="note-text" id="noteText">Tulis catatan ulang tahunmu di sini. Kamu bisa menggantinya di bagian CONFIG pada kode HTML.</p>
+            <p class="note-from" id="noteFrom">— dariku, untukmu</p>
+          </div>
+        </div>
       </div>
     </div>
 
-    <!-- FOTO NOTE: muncul di bawah foto kue, dengan jarak -->
-    <div class="note-photo-wrap" id="notePhotoWrap">
-      <img class="note-photo" id="notePhoto" src="note.png" alt="Catatan ulang tahun">
-    </div>
-
-    <!-- TOMBOL CONTINUE: di bawah foto note -->
+    <!-- TOMBOL CONTINUE -->
     <div class="continue-wrap" id="continueWrap">
-      <button class="continue-btn" id="continueBtn" type="button">Lanjutkan</button>
+      <button class="continue-btn" id="continueBtn" type="button">Lanjutkan ➜</button>
     </div>
 
     <!-- GIFT (animasi Lottie), muncul di bawah note setelah continue -->
     <div class="gift-wrap" id="giftWrap">
-      <p class="gift-hint">Masih ada satu kejutan lagi</p>
+      <p class="gift-hint">Masih ada satu kejutan lagi 🎁</p>
       <div class="gift-box" id="giftBox" tabindex="0" role="button" aria-label="Buka kotak kado">
         <div class="gift-glow"></div>
         <div id="giftLottie"></div>
@@ -435,7 +492,7 @@
     </div>
   </div>
 
-  <footer>buat kamu</footer>
+  <footer>dibuat dengan sepenuh hati 💌</footer>
 </div>
 
 <script>
@@ -494,6 +551,9 @@ const CONFIG = {
 if (CONFIG.friendName){
   document.getElementById('titleText').textContent = "Selamat Ulang Tahun, " + CONFIG.friendName + "!";
 }
+document.getElementById('noteText').textContent = CONFIG.birthdayNote;
+document.getElementById('noteFrom').textContent = CONFIG.noteFrom;
+
 const cakeImg = document.getElementById('cakePhoto');
 cakeImg.src = CONFIG.cakeImageSrc;
 cakeImg.onerror = function(){
@@ -542,12 +602,13 @@ function tryPlayMusic(){
 }
 
 startBtn.addEventListener('click', () => {
+  // Tampilkan overlay foto slip SEKALIAN dengan menyembunyikan overlay start,
+  // supaya halaman utama (yang ada foto kue) tidak sempat terlihat sedikit
+  // pun oleh user sebelum fitur foto slip muncul menutupi layar. Ini menjaga
+  // kejutan supaya user tidak tahu dulu apa yang menanti di halaman utama.
+  showPhotoSlip();
   startOverlay.classList.add('hidden');
   tryPlayMusic();
-  // tunggu overlay gelap selesai memudar (transisi .7s), lalu tampilkan
-  // fitur foto slip layar penuh. Kejutan besar (confetti dkk) baru muncul
-  // setelah semua foto/video di foto slip selesai digeser.
-  setTimeout(showPhotoSlip, 720);
 });
 
 musicToggle.addEventListener('click', () => {
@@ -560,19 +621,19 @@ musicToggle.addEventListener('click', () => {
   }
 });
 
-/* ========================= REVEAL GIFT (setelah tombol Continue) ========================= */
+/* ========================= REVEAL NOTE & GIFT (setelah tombol Continue) ========================= */
+const noteWrap = document.getElementById('noteWrap');
 const giftWrap = document.getElementById('giftWrap');
+const cakeFrame = document.getElementById('cakeFrame');
 const continueWrap = document.getElementById('continueWrap');
 const continueBtn = document.getElementById('continueBtn');
 
 continueBtn.addEventListener('click', () => {
   continueWrap.classList.add('hide');
-  giftWrap.classList.add('show');
+  cakeFrame.classList.add('dimmed');
+  setTimeout(() => { noteWrap.classList.add('show'); }, 200);
+  setTimeout(() => { giftWrap.classList.add('show'); }, 700);
 });
-
-/* ========================= FOTO NOTE muncul setelah foto kue ========================= */
-const notePhotoWrap = document.getElementById('notePhotoWrap');
-setTimeout(() => { notePhotoWrap.classList.add('show'); }, 500);
 
 /* ========================= GIFT (animasi Lottie) ========================= */
 const giftBox = document.getElementById('giftBox');
