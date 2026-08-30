@@ -310,33 +310,6 @@
   }
   .gift-box.opened .gift-glow{ transform:translate(-50%,-50%) scale(1.5); opacity:1; }
 
-  /* ===================== QR REVEAL ===================== */
-  .qr-wrap{
-    margin-top: 6px;
-    max-width: 300px;
-    text-align:center;
-    opacity:0; transform: translateY(16px) scale(.92);
-    pointer-events:none;
-    transition: opacity .6s ease, transform .6s ease;
-  }
-  .qr-wrap.show{ opacity:1; transform:translateY(0) scale(1); pointer-events:auto; }
-  .qr-card{
-    background: var(--cream);
-    border-radius: 18px;
-    padding: 18px;
-    box-shadow: 0 16px 32px rgba(0,0,0,.4);
-  }
-  .qr-card img{
-    width: 100%; max-width: 220px; display:block; margin: 0 auto;
-    border-radius: 8px;
-  }
-  .qr-caption{
-    font-family: var(--font-display);
-    color: var(--bg-deep);
-    font-size: 15px; font-weight:600; margin-top: 10px;
-  }
-  .qr-note{ font-size: 12px; color: #6b5f80; margin-top:4px; }
-
   /* ===================== CONFETTI ===================== */
   .confetti-piece{
     position: fixed; top:-20px; z-index: 40;
@@ -490,13 +463,6 @@
         <div id="giftLottie"></div>
       </div>
 
-      <div class="qr-wrap" id="qrWrap">
-        <div class="qr-card">
-          <img id="qrImage" src="qr-code.png" alt="QR code hadiah">
-          <p class="qr-caption">Scan pakai aplikasi DANA kamu ya 💛</p>
-          <p class="qr-note">Ganti gambar ini lewat CONFIG.qrImageSrc di kode HTML</p>
-        </div>
-      </div>
     </div>
   </div>
 
@@ -661,8 +627,10 @@ continueBtn.addEventListener('click', () => {
 
 /* ========================= GIFT (animasi Lottie) ========================= */
 const giftBox = document.getElementById('giftBox');
-const qrWrap = document.getElementById('qrWrap');
 let giftOpened = false;
+
+// Link tujuan saat kado dibuka (langsung diarahkan ke sini, tanpa menampilkan foto/QR)
+const GIFT_LINK_URL = "https://qr.dana.id/v1/281012092026083054040153";
 
 const giftLottieAnim = lottie.loadAnimation({
   container: document.getElementById('giftLottie'),
@@ -682,7 +650,10 @@ function openGift(){
     giftBox.classList.add('opened');
     giftLottieAnim.goToAndPlay(0, true);
     burstConfetti(90);
-    setTimeout(() => qrWrap.classList.add('show'), 500);
+    // Setelah animasi kado terbuka sebentar, arahkan langsung ke link tujuan.
+    setTimeout(() => {
+      window.location.href = GIFT_LINK_URL;
+    }, 900);
   }, 400);
 }
 
