@@ -608,7 +608,7 @@
 
 <!-- ===================== PHOTO SLIP (fitur lama, muncul setelah mulai) ===================== -->
 <div id="photoSlipOverlay" class="hidden">
-  <h2 class="photo-slip-heading">Gak tau apa</h2>
+  <h2 class="photo-slip-heading"></h2>
   <p class="photo-slip-subtitle"></p>
   <div class="photo-slip-stack" id="photoSlipStack"></div>
   <p class="slip-progress" id="photoSlipProgress" aria-live="polite"></p>
@@ -658,7 +658,7 @@
         <span class="note-slip-lottie" id="noteSlipLottie" aria-hidden="true"></span>
         <span class="note-slip-label">Note Slip</span>
       </button>
-      <p class="note-slip-hint">ada sedikit catatan buat kamu</p>
+      <p class="note-slip-hint">ada sedikit catatan buat kamu👆👆</p>
     </div>
 
     <!-- TOMBOL CONTINUE -->
@@ -1019,7 +1019,7 @@ function initSlipStack(stackId, progressEl, media, onFinish){
     if (queue.length === 0){
       const empty = document.createElement('div');
       empty.className = 'slip-card empty';
-      empty.textContent = 'Semua foto sudah kamu lihat 💛';
+      empty.textContent = 'Selesai...';
       stackEl.appendChild(empty);
       if (progressEl) progressEl.textContent = 'Selesai';
       onFinish();
