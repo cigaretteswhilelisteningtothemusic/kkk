@@ -191,13 +191,11 @@
     /* background sudah dihapus dari foto (PNG transparan), drop-shadow
        mengikuti siluet kue supaya menyatu dengan latar halaman */
     filter: drop-shadow(0 22px 30px rgba(0,0,0,.55));
-    transition: filter .7s cubic-bezier(.22,1,.36,1), opacity .7s cubic-bezier(.22,1,.36,1), transform .7s cubic-bezier(.22,1,.36,1);
+    transition: filter .6s ease, opacity .6s ease;
   }
   .cake-photo-frame.dimmed .cake-photo{
-    opacity:0;
-    transform: scale(.82);
-    filter: drop-shadow(0 22px 30px rgba(0,0,0,.55)) blur(6px);
-    pointer-events:none;
+    opacity:.35;
+    filter: drop-shadow(0 22px 30px rgba(0,0,0,.55)) blur(1px);
   }
 
   /* ===================== CONTINUE BUTTON ===================== */
@@ -236,11 +234,11 @@
     align-items:center;
     justify-content:center;
     padding: 10px;
-    opacity:0; transform: scale(.3) rotate(-360deg);
+    opacity:0; transform: translateY(16px) scale(.96);
     pointer-events:none;
-    transition: opacity .35s ease-out, transform .9s cubic-bezier(.34,1.56,.64,1);
+    transition: opacity .6s ease, transform .6s ease;
   }
-  .note-wrap.show{ opacity:1; transform:scale(1) rotate(0deg); pointer-events:auto; }
+  .note-wrap.show{ opacity:1; transform:translateY(0) scale(1); pointer-events:auto; }
   .note-card{
     position:relative;
     width:100%;
@@ -275,12 +273,12 @@
   /* ===================== GIFT (animasi Lottie) ===================== */
   .gift-wrap{
     margin-top: 40px;
-    opacity:0; transform: scale(.3) rotate(-360deg);
+    opacity:0; transform: translateY(24px) scale(.95);
     pointer-events:none;
-    transition: opacity .35s ease-out, transform .9s cubic-bezier(.34,1.56,.64,1);
+    transition: opacity .8s ease .15s, transform .8s ease .15s;
     display:flex; flex-direction:column; align-items:center; gap:14px;
   }
-  .gift-wrap.show{ opacity:1; transform:scale(1) rotate(0deg); pointer-events:auto; }
+  .gift-wrap.show{ opacity:1; transform:translateY(0) scale(1); pointer-events:auto; }
 
   .gift-hint{ font-size: 14px; color: var(--cream-dim); }
 
@@ -289,22 +287,6 @@
     display:flex; align-items:center; justify-content:center;
   }
   .gift-box:focus-visible{ outline: 3px solid var(--pink); outline-offset:4px; border-radius: 8px; }
-  /* Gerakan "tidak sabar" saat kado belum dibuka: diam sejenak lalu
-     bergetar-getar kecil seolah ingin membuka diri sendiri, berulang. */
-  .gift-box:not(.opened) #giftLottie{
-    animation: gift-impatient 2.8s ease-in-out infinite;
-    transform-origin: 50% 85%;
-  }
-  @keyframes gift-impatient{
-    0%, 74%, 100%{ transform: rotate(0deg) scale(1); }
-    77%{ transform: rotate(-9deg) scale(1.05); }
-    80%{ transform: rotate(8deg) scale(1.04); }
-    83%{ transform: rotate(-7deg) scale(1.04); }
-    86%{ transform: rotate(6deg) scale(1.03); }
-    89%{ transform: rotate(-4deg) scale(1.02); }
-    92%{ transform: rotate(3deg) scale(1.01); }
-    95%{ transform: rotate(-1deg) scale(1); }
-  }
   .gift-box.shake #giftLottie{ animation: box-shake .5s ease; }
   @keyframes box-shake{
     0%,100%{ transform: rotate(0); }
@@ -414,14 +396,6 @@
   .confetti-piece{ animation-duration: 3s !important; }
   .balloon-piece{ animation-duration: 6.5s !important; }
   .emoji-piece{ animation-duration: 3.6s !important; }
-
-  /* Animasi note & kado (muncul membesar sambil berputar) tetap dijalankan
-     penuh meskipun perangkat mengaktifkan "kurangi animasi" (Reduce Motion),
-     supaya efek putarnya tetap terlihat. */
-  .note-wrap{ transition-duration: .35s, .9s !important; }
-  .gift-wrap{ transition-duration: .35s, .9s !important; }
-  .cake-photo{ transition-duration: .7s !important; }
-  .gift-box:not(.opened) #giftLottie{ animation-duration: 2.8s !important; }
 
   @media (max-width: 380px){
     .cake-wrap{ transform: scale(.85); }
@@ -602,13 +576,12 @@ function tryPlayMusic(){
 }
 
 startBtn.addEventListener('click', () => {
-  // Tampilkan overlay foto slip SEKALIAN dengan menyembunyikan overlay start,
-  // supaya halaman utama (yang ada foto kue) tidak sempat terlihat sedikit
-  // pun oleh user sebelum fitur foto slip muncul menutupi layar. Ini menjaga
-  // kejutan supaya user tidak tahu dulu apa yang menanti di halaman utama.
-  showPhotoSlip();
   startOverlay.classList.add('hidden');
   tryPlayMusic();
+  // tunggu overlay gelap selesai memudar (transisi .7s), lalu tampilkan
+  // fitur foto slip layar penuh. Kejutan besar (confetti dkk) baru muncul
+  // setelah semua foto/video di foto slip selesai digeser.
+  setTimeout(showPhotoSlip, 720);
 });
 
 musicToggle.addEventListener('click', () => {
@@ -631,8 +604,8 @@ const continueBtn = document.getElementById('continueBtn');
 continueBtn.addEventListener('click', () => {
   continueWrap.classList.add('hide');
   cakeFrame.classList.add('dimmed');
-  setTimeout(() => { noteWrap.classList.add('show'); }, 200);
-  setTimeout(() => { giftWrap.classList.add('show'); }, 700);
+  noteWrap.classList.add('show');
+  setTimeout(() => { giftWrap.classList.add('show'); }, 500);
 });
 
 /* ========================= GIFT (animasi Lottie) ========================= */
