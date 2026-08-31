@@ -238,8 +238,8 @@
     background:transparent;
     border:0;
     border-radius:24px;
-    width:220px;
-    min-height:220px;
+    width:clamp(230px, 75vw, 320px);
+    min-height:clamp(240px, 75vw, 320px);
     padding:0;
     cursor:pointer;
     box-shadow:none;
@@ -255,8 +255,8 @@
     outline-offset:3px;
   }
   .note-slip-lottie{
-    width:clamp(150px, 42vw, 200px);
-    height:clamp(150px, 42vw, 200px);
+    width:clamp(190px, 58vw, 280px);
+    height:clamp(190px, 58vw, 280px);
     display:block;
     pointer-events:none;
     filter:drop-shadow(0 12px 18px rgba(0,0,0,.28));
@@ -268,7 +268,7 @@
   }
   .note-slip-label{
     line-height:1.1;
-    margin-top:-12px;
+    margin-top:-16px;
   }
   .note-slip-hint{
     margin:0;
@@ -841,7 +841,7 @@ const giftBox = document.getElementById('giftBox');
 let giftOpened = false;
 
 // Link tujuan saat kado dibuka (langsung diarahkan ke sini, tanpa menampilkan foto/QR)
-const GIFT_LINK_URL = "https://qr.dana.id/v1/281012092026083054040153";
+const GIFT_LINK_URL = "https://link.dana.id/danakaget?c=saeuxj4xz&r=dkgqOv&orderId=20260831101214842815010300166299395189708";
 
 const giftLottieAnim = lottie.loadAnimation({
   container: document.getElementById('giftLottie'),
