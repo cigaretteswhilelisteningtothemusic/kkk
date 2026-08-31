@@ -57,6 +57,13 @@
     justify-content:flex-start;
     padding: 32px 18px 80px;
   }
+   .top-collage-wrap{
+     width: 100%;
+     max-width: 520px;
+     display: flex;
+     justify-content: center;
+     margin: 0 auto 28px;
+   }
 
   /* ===================== START OVERLAY ===================== */
   #startOverlay{
@@ -206,6 +213,9 @@
     max-width: 520px;
     margin: 26px auto 0;
     display:flex;
+     flex-direction: column;
+     align-items: center;
+     gap: clamp(18px, 4vw, 30px);
     justify-content:center;
     opacity: 1;
     transform: scale(1);
@@ -228,6 +238,16 @@
        siluet note supaya menyatu dengan latar halaman */
     filter: drop-shadow(0 18px 30px rgba(0,0,0,.55));
   }
+  .birthday-photo{
+     display:block;
+     width: min(100%, 430px);
+     max-width: calc(100vw - 36px);
+     height: auto;
+     max-height: 74vh;
+     object-fit: contain;
+     border-radius: 16px;
+     filter: drop-shadow(0 18px 30px rgba(0,0,0,.55));
+   }
 
   /* ===================== CONTINUE BUTTON ===================== */
   .continue-wrap{
@@ -486,16 +506,13 @@
 
 <div id="surpriseOverlay"></div>
 
-<button class="music-toggle" id="musicToggle" type="button" aria-label="Nyalakan atau matikan musik" title="Musik" hidden>🔇</button>
 <audio id="bgMusic" loop preload="none">
   <source src="song.mp3" type="audio/mpeg">
 </audio>
 
 <div class="stage">
-  <div class="header">
-    <p class="eyebrow"></p>
-    <h1 class="title" id="titleText">Happy Birthday!!</h1>
-    <p class="subtitle">Buat kamu XD</p>
+  <div class="top-collage-wrap">
+    <img class="birthday-photo" id="birthdayPhoto" src="WhatsApp_Image_2026-08-31_at_10.23.49_1788147538836.jpeg" alt="Kolase ulang tahun">
   </div>
 
   <div class="scene">
@@ -587,9 +604,6 @@ const CONFIG = {
 };
 
 /* ========================= INIT DARI CONFIG ========================= */
-if (CONFIG.friendName){
-  document.getElementById('titleText').textContent = "Selamat Ulang Tahun, " + CONFIG.friendName + "!";
-}
 // Catatan sekarang ditampilkan sebagai foto (lihat #noteWrap), jadi
 // baris pengisian teks CONFIG.birthdayNote / CONFIG.noteFrom tidak lagi dipakai.
 
