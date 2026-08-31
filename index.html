@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Selamat Ulang Tahun 🎂</title>
+<title>Selamat Ulang Tahun</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Quicksand:wght@400;500;600;700&family=Caveat:wght@500;600;700&display=swap" rel="stylesheet">
 <style>
@@ -473,15 +473,15 @@
 <!-- ===================== START OVERLAY ===================== -->
 <div id="startOverlay">
   <div class="start-emoji">🎈</div>
-  <h1 class="start-title">Ada kejutan untukmu</h1>
-  <p class="start-sub">Siap-siap ya, ada kue, lilin, dan sedikit kejutan yang menunggu.</p>
-  <button class="tap-btn" id="startBtn" type="button">Ketuk untuk mulai 🎉</button>
+  <h1 class="start-title">aku mau bales yang kemarin XD</h1>
+  <p class="start-sub">maap kalo biasa2 aja ya</p>
+  <button class="tap-btn" id="startBtn" type="button">Ketuk untuk mulai</button>
 </div>
 
 <!-- ===================== PHOTO SLIP (overlay penuh layar) ===================== -->
 <div id="photoSlipOverlay" class="hidden">
   <div class="photo-slip-stack" id="photoSlipStack"></div>
-  <p class="slip-hint">Geser fotonya untuk lihat berikutnya ✨</p>
+  <p class="slip-hint">Geser fotonya untuk lihat berikutnya</p>
 </div>
 
 <div id="surpriseOverlay"></div>
@@ -493,9 +493,9 @@
 
 <div class="stage">
   <div class="header">
-    <p class="eyebrow">Kejutan Ulang Tahun</p>
-    <h1 class="title" id="titleText">Selamat Ulang Tahun!</h1>
-    <p class="subtitle">Untukmu, hari ini 🎂</p>
+    <p class="eyebrow"></p>
+    <h1 class="title" id="titleText">Happy Birthday!!</h1>
+    <p class="subtitle">Buat kamu XD</p>
   </div>
 
   <div class="scene">
@@ -517,12 +517,12 @@
 
     <!-- TOMBOL CONTINUE -->
     <div class="continue-wrap" id="continueWrap">
-      <button class="continue-btn" id="continueBtn" type="button">Lanjutkan ➜</button>
+      <button class="continue-btn" id="continueBtn" type="button">Lanjutkan</button>
     </div>
 
     <!-- GIFT (animasi Lottie), muncul di bawah note setelah continue -->
     <div class="gift-wrap" id="giftWrap">
-      <p class="gift-hint">Masih ada satu kejutan lagi 🎁</p>
+      <p class="gift-hint">Masih ada satu lagi</p>
       <div class="gift-box" id="giftBox" tabindex="0" role="button" aria-label="Buka kotak kado">
         <div class="gift-glow"></div>
         <div id="giftLottie"></div>
@@ -531,7 +531,7 @@
     </div>
   </div>
 
-  <footer>dibuat dengan sepenuh hati 💌</footer>
+  <footer>hope u like it</footer>
 </div>
 
 <script>
@@ -760,7 +760,7 @@ function burstBalloons(count){
 }
 
 /* ========================= EMOJI BERTERBANGAN ========================= */
-const surpriseEmojis = ['🤩','🥳','🎉','🎊','✨','🎀','🎁'];
+const surpriseEmojis = ['🥳','🎉','🎊','✨','🎀','🎁'];
 function burstEmojis(count){
   const overlay = document.getElementById('surpriseOverlay');
   for (let i = 0; i < count; i++){
@@ -824,7 +824,7 @@ function initPhotoSlip(){
     if (queue.length === 0){
       const empty = document.createElement('div');
       empty.className = 'slip-card empty';
-      empty.textContent = 'Semua foto sudah dilihat 💛';
+      empty.textContent = 'wait';
       stackEl.appendChild(empty);
       finishPhotoSlip();
       return;
