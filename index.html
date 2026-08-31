@@ -235,20 +235,19 @@
     font-size:14px;
     letter-spacing:.25px;
     color:var(--cream);
-    background:linear-gradient(135deg, rgba(255,107,157,.95), rgba(185,140,224,.95));
-    border:1px solid rgba(255,255,255,.18);
+    background:transparent;
+    border:0;
     border-radius:24px;
-    width:132px;
-    min-height:132px;
-    padding:8px 12px 10px;
+    width:220px;
+    min-height:220px;
+    padding:0;
     cursor:pointer;
-    box-shadow:0 8px 24px rgba(255,107,157,.22);
-    transition:transform .2s ease, box-shadow .2s ease, filter .2s ease;
+    box-shadow:none;
+    transition:transform .2s ease, filter .2s ease;
   }
   .note-slip-btn:hover{
-    transform:translateY(-2px);
+    transform:translateY(-2px) scale(1.035);
     filter:saturate(1.1);
-    box-shadow:0 12px 28px rgba(255,107,157,.32);
   }
   .note-slip-btn:active{ transform:translateY(0); }
   .note-slip-btn:focus-visible{
@@ -256,10 +255,11 @@
     outline-offset:3px;
   }
   .note-slip-lottie{
-    width:92px;
-    height:92px;
+    width:clamp(150px, 42vw, 200px);
+    height:clamp(150px, 42vw, 200px);
     display:block;
     pointer-events:none;
+    filter:drop-shadow(0 12px 18px rgba(0,0,0,.28));
   }
   .note-slip-lottie svg{
     width:100%;
@@ -268,7 +268,7 @@
   }
   .note-slip-label{
     line-height:1.1;
-    margin-top:-2px;
+    margin-top:-12px;
   }
   .note-slip-hint{
     margin:0;
