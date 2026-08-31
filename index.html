@@ -486,7 +486,7 @@
 
 <div id="surpriseOverlay"></div>
 
-<button class="music-toggle" id="musicToggle" type="button" aria-label="Nyalakan atau matikan musik" title="Musik">🔇</button>
+<button class="music-toggle" id="musicToggle" type="button" aria-label="Nyalakan atau matikan musik" title="Musik" hidden>🔇</button>
 <audio id="bgMusic" loop preload="none">
   <source src="song.mp3" type="audio/mpeg">
 </audio>
@@ -633,10 +633,8 @@ function tryPlayMusic(){
   bgMusic.volume = 0.7;
   bgMusic.play().then(()=>{
     musicOn = true;
-    musicToggle.textContent = '🔊';
   }).catch(()=>{
     musicOn = false;
-    musicToggle.textContent = '🔇';
   });
 }
 
@@ -647,18 +645,22 @@ startBtn.addEventListener('click', () => {
   // kejutan supaya user tidak tahu dulu apa yang menanti di halaman utama.
   showPhotoSlip();
   startOverlay.classList.add('hidden');
-  tryPlayMusic();
+  // Catatan: musik latar SENGAJA tidak diputar di sini. Musik baru akan mulai
+  // diputar otomatis setelah user selesai menggeser semua foto di halaman
+  // foto slip (lihat finishPhotoSlip()), supaya lagu "song.mp3" tidak
+  // langsung terdengar ketika user masih berada di fitur foto slip.
 });
 
-musicToggle.addEventListener('click', () => {
-  if (musicOn){
-    bgMusic.pause();
-    musicOn = false;
-    musicToggle.textContent = '🔇';
-  } else {
-    tryPlayMusic();
-  }
-});
+if (musicToggle) {
+  musicToggle.addEventListener('click', () => {
+    if (musicOn){
+      bgMusic.pause();
+      musicOn = false;
+    } else {
+      tryPlayMusic();
+    }
+  });
+}
 
 /* ========================= REVEAL NOTE & GIFT (setelah tombol Continue) ========================= */
 const noteWrap = document.getElementById('noteWrap');
@@ -786,7 +788,6 @@ function showPhotoSlip(){
   if (musicOn){
     bgMusic.pause();
     musicOn = false;
-    musicToggle.textContent = '🔇';
   }
 
   photoSlipOverlay.classList.remove('hidden');
@@ -799,10 +800,11 @@ function finishPhotoSlip(){
   setTimeout(() => {
     photoSlipOverlay.classList.add('hidden');
 
-    // Nyalakan lagi musik latar (jika sebelumnya sedang menyala sebelum foto slip dibuka).
-    if (wasMusicOnBeforePhotoSlip){
-      tryPlayMusic();
-    }
+    // Nyalakan musik latar di sini: baik ini pemutaran pertama kali (musik
+    // belum pernah diputar sebelum foto slip dibuka) maupun musik memang
+    // sedang menyala sebelum foto slip dibuka, keduanya butuh musik
+    // diputar/dilanjutkan sekarang setelah user keluar dari foto slip.
+    tryPlayMusic();
 
     setTimeout(triggerBigSurprise, 650);
   }, 1200);
